@@ -2,7 +2,7 @@
 import sys
 import subprocess
 import rf
-
+#TODO: change all auto scale script to python script 
 def commnad(cmd,arg,output):
 	#p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
 	if arg!='to_file':	
