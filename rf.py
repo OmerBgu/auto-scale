@@ -14,10 +14,11 @@ def predict(qoe,podsnumber):
 
 	#load data	
 	train='/home/ubuntu/train.csv'
+	train='train.csv'
 	#url=url+str(podsnumber)+'.csv'
  	# train dat just cpu and memory and pod
 	testpath = '/home/ubuntu/test.csv'
-
+	testpath='test.csv'
 	train_set = pandas.read_csv(train)  # the data from offline measurments
 	test = pandas.read_csv(testpath)  # , names=namesTrain
 	test_set = genfromtxt('test.csv', delimiter=',')
@@ -52,8 +53,8 @@ def predict(qoe,podsnumber):
 	if(delta>1):
     		return 1 # delta is more than 1 scale up
 	if (delta<0):
-    		return 2 #qoe is negative scale down
-	return 3 # no need to scale
+    		return -1 #qoe is negative scale down
+	return 0 # no need to scale
 
 if __name__ == "__main__":
 	predict()
