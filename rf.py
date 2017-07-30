@@ -1,3 +1,13 @@
+"""
+random forest prediction  
+===================
+
+what we predict?  
+----------
+the examined feature are the pod's cpu, memory and the predicted target us the current network delay at the client that
+normalized to the formula of TRUNC(IF(H138<1.2,1,IF(H138<1.5,2,3)))
+"""
+
 from sklearn.ensemble import RandomForestClassifier
 import sys
 import pandas
@@ -45,7 +55,6 @@ def predict(qoe,podsnumber):
   	#rf.fit(X_train, Y_train)
 	rf.fit(X, Y)
   	predictions = rf.predict(test)
-  	sampleNumber = 5
   	results = list(map(int, predictions))
   	avg= reduce(lambda x, y: x + y, results) / len(results)
   	delta=avg-qoe

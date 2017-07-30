@@ -1,0 +1,46 @@
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="client (module)">
+    <param name="Local" value="doc/client.html#module-client">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="cmd_4_arg() (in module main)">
+    <param name="Local" value="doc/main.html#main.cmd_4_arg">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="cmd_arg() (in module main)">
+    <param name="Local" value="doc/main.html#main.cmd_arg">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="commnad() (in module main)">
+    <param name="Local" value="doc/main.html#main.commnad">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="get_pod_from_output() (in module main)">
+    <param name="Local" value="doc/main.html#main.get_pod_from_output">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="main (module)">
+    <param name="Local" value="doc/main.html#module-main">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="main() (in module main)">
+    <param name="Local" value="doc/main.html#main.main">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="pods_scale() (in module main)">
+    <param name="Local" value="doc/main.html#main.pods_scale">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="predict() (in module rf)">
+    <param name="Local" value="doc/rf.html#rf.predict">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="rf (module)">
+    <param name="Local" value="doc/rf.html#module-rf">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="should_i_deploy() (in module main)">
+    <param name="Local" value="doc/main.html#main.should_i_deploy">
+</OBJECT>
+</UL>

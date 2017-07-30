@@ -1,0 +1,50 @@
+[OPTIONS]
+Binary TOC=No
+Binary Index=No
+Compiled file=Auto-Scaleforkubernetescontainersdoc.chm
+Contents file=Auto-Scaleforkubernetescontainersdoc.hhc
+Default Window=Auto-Scaleforkubernetescontainersdoc
+Default topic=index.html
+Display compile progress=No
+Full text search stop list file=Auto-Scaleforkubernetescontainersdoc.stp
+Full-text search=Yes
+Index file=Auto-Scaleforkubernetescontainersdoc.hhk
+Language=0x409
+Title=Auto-Scale for kubernetes containers 1.1 documentation
+
+[WINDOWS]
+Auto-Scaleforkubernetescontainersdoc="Auto-Scale for kubernetes containers 1.1 documentation","Auto-Scaleforkubernetescontainersdoc.hhc","Auto-Scaleforkubernetescontainersdoc.hhk","index.html","index.html",,,,,0x63520,220,0x10384e,[0,0,1024,768],,,,,,,0
+
+[FILES]
+py-modindex.html
+genindex.html
+index.html
+_static\basic.css
+_static\up.png
+_static\up-pressed.png
+_static\watermark.png
+_static\minus.png
+_static\comment-bright.png
+_static\headerbg.png
+_static\pygments.css
+_static\navigation.png
+_static\darkmetal.png
+_static\comment-close.png
+_static\watermark_blur.png
+_static\down-pressed.png
+_static\print.css
+_static\ajax-loader.gif
+_static\scrolls.css
+_static\plus.png
+_static\file.png
+_static\down.png
+_static\logo.png
+_static\metal.png
+_static\comment.png
+_modules\main.html
+_modules\index.html
+_modules\rf.html
+doc\modules.html
+doc\main.html
+doc\client.html
+doc\rf.html

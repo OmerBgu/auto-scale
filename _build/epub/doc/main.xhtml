@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <meta charset="utf-8" />
+    <title>main module</title>
+    <link rel="stylesheet" href="../_static/epub.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" /> 
+  </head>
+  <body>
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-main">
+<span id="main-module"></span><h1>main module</h1>
+<div class="section" id="this-is-the-main-loop-endles-loop-that-each-5-seconds-does">
+<h2>this is the main loop endles loop that each 5 seconds does:</h2>
+<div class="section" id="take-5-samples-of-the-server-cluster-cpu-and-memory">
+<h3>take 5 samples of the server cluster cpu and memory</h3>
+<p>intrafacing with kubernetes cli</p>
+</div>
+<div class="section" id="predict-the-network-delay">
+<h3>predict the network delay</h3>
+<p>using random forest method (may cahnge easily the clasify algorythem) and according to intial training data
+delay formula = =TRUNC(IF(H138&lt;1.2,1,IF(H138&lt;1.5,2,3)))</p>
+</div>
+<div class="section" id="make-decision-based-on-qoe-level">
+<h3>make decision based on qoe level</h3>
+<p>if you are in the right qoe- do nothing if you are lees then it- scale down ,grater then it- check if it is economic woethy anf if so scale uo else go back to the begining</p>
+</div>
+<div class="section" id="how-to-use-this-project">
+<h3>how to use this project?</h3>
+<p>./run_main.sh 
+all the parmters are in this script</p>
+<dl class="function">
+<dt id="main.cmd_4_arg">
+<code class="descclassname">main.</code><code class="descname">cmd_4_arg</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em>, <em>arg4</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/main.xhtml#cmd_4_arg"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="main.cmd_arg">
+<code class="descclassname">main.</code><code class="descname">cmd_arg</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2</em>, <em>arg3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/main.xhtml#cmd_arg"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="main.commnad">
+<code class="descclassname">main.</code><code class="descname">commnad</code><span class="sig-paren">(</span><em>cmd</em>, <em>arg</em>, <em>out</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/main.xhtml#commnad"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>short description of the function command</p>
+<p>execute bash command</p>
+<p>parameteres: the comand and it’s arguments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>output and error if there is</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.get_pod_from_output">
+<code class="descclassname">main.</code><code class="descname">get_pod_from_output</code><span class="sig-paren">(</span><em>pods_output</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/main.xhtml#get_pod_from_output"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>short description of the function
+get the pods number from kubectl top pods output</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.main">
+<code class="descclassname">main.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/main.xhtml#main"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>short description of the function
+main loop</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.pods_scale">
+<code class="descclassname">main.</code><code class="descname">pods_scale</code><span class="sig-paren">(</span><em>pod</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/main.xhtml#pods_scale"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>short description of the function
+scale up to the pod number</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main.should_i_deploy">
+<code class="descclassname">main.</code><code class="descname">should_i_deploy</code><span class="sig-paren">(</span><em>sum_money_spent_in_the_system</em>, <em>price_of_deploy_new_pod</em>, <em>price_per_seconds_of_pod</em>, <em>time_of_deploy_new_pod</em>, <em>time_slot_money_threshold</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/main.xhtml#should_i_deploy"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>short description of the function
+make decision to scale up if price_of_deploy_new_pod*time_of_deploy_new_pod+price_per_seconds_of_pod*pod &lt;time_slot_money_threshold</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

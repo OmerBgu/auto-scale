@@ -1,3 +1,14 @@
+"""
+client simulation  
+===================
+
+this is the inital hand-shake of a new client 
+----------
+this program is a simple client simulation that enterd based on posin entrance to the server
+and capture the network delay on the client side 
+"""
+
+
 import subprocess
 import time
 import numpy as np

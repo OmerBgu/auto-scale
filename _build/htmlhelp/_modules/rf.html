@@ -1,0 +1,107 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>rf</title>
+  
+    <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" /> 
+  </head>
+  <body>
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../index.html"
+          title="back to the documentation overview"><span>rf</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">rf</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for rf</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">random forest prediction  </span>
+<span class="sd">===================</span>
+
+<span class="sd">what we predict?  </span>
+<span class="sd">----------</span>
+<span class="sd">the examined feature are the pod&#39;s cpu, memory  and the predicted target us the current network delay at the client that</span>
+<span class="sd">normalized to the formula of TRUNC(IF(H138&lt;1.2,1,IF(H138&lt;1.5,2,3)))</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">genfromtxt</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">model_selection</span>
+
+<span class="c1">#Todo: </span>
+ <span class="c1"># change data to delay from wireshark, how? -&gt; IO graph, unit-&gt;advance, count frames of field frame.time_delta </span>
+ <span class="c1">#and pick view as time of day and then copy to train1(or other number of pods train2,3...).</span>
+ <span class="c1"># check if it will work like it if the decision of others pod will be correct </span>
+ <span class="c1"># again find a new fourmula for train, maybe for each train decide on a threshold formula of qoe per delay </span>
+ <span class="c1"># if wont wore so worst case is to parse so that each pod will be examined and if one of them is needed to scale scale all system  </span>
+ <span class="c1"># maybe all of the split of the data was unnecessary ...</span>
+<div class="viewcode-block" id="predict"><a class="viewcode-back" href="../doc/rf.html#rf.predict">[docs]</a><span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">qoe</span><span class="p">,</span><span class="n">podsnumber</span><span class="p">):</span>
+	<span class="c1">#url = &#39;/home/omer/PycharmProjects/untitled/data/try.csv&#39;</span>
+        <span class="c1">#load data  </span>
+ 	<span class="n">train</span><span class="o">=</span><span class="s1">&#39;/home/ubuntu/train&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">podsnumber</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.csv&quot;</span> <span class="c1">#true path on the vm</span>
+ 	<span class="n">train</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">podsnumber</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.csv&quot;</span> <span class="c1">#just for debug path on my computer</span>
+ 	<span class="c1">#url=url+str(podsnumber)+&#39;.csv&#39;</span>
+	<span class="c1"># train dat just cpu and memory and pod</span>
+ 	<span class="n">testpath</span> <span class="o">=</span> <span class="s1">&#39;/home/ubuntu/test.csv&#39;</span>
+  	<span class="n">testpath</span><span class="o">=</span><span class="s1">&#39;test.csv&#39;</span>
+  	<span class="n">train_set</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>  <span class="c1"># the data from offline measurments</span>
+  	<span class="n">test</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">testpath</span><span class="p">)</span>  <span class="c1"># , names=namesTrain</span>
+  	<span class="n">test_set</span> <span class="o">=</span> <span class="n">genfromtxt</span><span class="p">(</span><span class="s1">&#39;test.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+  	<span class="c1"># take average of the samples</span>
+  	<span class="n">row</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">podsnumber</span> <span class="o">*</span> <span class="mi">2</span>
+  	<span class="c1"># Split-out validation train_set</span>
+  	<span class="n">train_set_as_array</span> <span class="o">=</span> <span class="n">train_set</span><span class="o">.</span><span class="n">values</span>
+	<span class="nb">print</span> <span class="nb">len</span> <span class="p">(</span><span class="n">train_set</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+  	<span class="c1"># train_set_as_array=transformed_values</span>
+  	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_set_as_array</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        	<span class="n">train_set_as_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+  	<span class="c1">#train_set_as_array = list(map(int, train_set_as_array))</span>
+  	<span class="n">X</span> <span class="o">=</span> <span class="n">train_set_as_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  	<span class="n">Y</span> <span class="o">=</span> <span class="n">train_set_as_array</span><span class="p">[:,</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  	<span class="n">split</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_set</span><span class="p">))</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_set_as_array</span><span class="p">))))</span> <span class="c1"># for more dynamic sizes</span>
+  	<span class="n">split</span> <span class="o">=</span> <span class="mf">0.2</span> 
+  	<span class="n">seed</span> <span class="o">=</span> <span class="mi">7</span>
+  	<span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_validation</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">split</span><span class="p">,</span>
+                                                                                <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+  	<span class="c1"># Make predictions on validation train_set</span>
+	<span class="n">rf</span><span class="o">=</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">bootstrap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">class_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;entropy&#39;</span><span class="p">,</span><span class="n">min_samples_leaf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 		<span class="n">min_samples_split</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">min_weight_fraction_leaf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  	<span class="c1">#rf = RandomForestClassifier()</span>
+  	<span class="c1">#rf.fit(X_train, Y_train)</span>
+	<span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+  	<span class="n">predictions</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+  	<span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
+  	<span class="n">avg</span><span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+  	<span class="n">delta</span><span class="o">=</span><span class="n">avg</span><span class="o">-</span><span class="n">qoe</span>
+  	<span class="k">if</span><span class="p">(</span><span class="n">delta</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+		<span class="nb">print</span> <span class="s2">&quot;scale up&quot;</span>
+        	<span class="k">return</span> <span class="mi">1</span> <span class="c1"># delta is more than 1 scale up		</span>
+  	<span class="k">if</span> <span class="p">(</span><span class="n">delta</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">):</span>
+		<span class="nb">print</span>  <span class="s2">&quot;scale down&quot;</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">#qoe is negative scale down</span>
+	<span class="k">return</span> <span class="mi">0</span> <span class="c1"># no need to scale</span></div>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="n">predict</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#just for debug values</span>
+
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Omer Anisfeld and reuven milshtein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>
