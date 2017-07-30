@@ -2,6 +2,7 @@
 import sys
 import subprocess
 import rf
+pod =1
 #TO DO:
 #change awk from file2.txt to manipulate output of kubectl get pod to know the pod number (see the output of it again)
 #implement calc of money on is it woth to deploy new pod  on function should_i_deploy() **strated ad naive implementation talk to omer gurevitz on it
@@ -30,14 +31,13 @@ def cmd_arg(arg1,arg2,arg3):
 	output, err = p.communicate(b"input data that is passed to subprocess stdin")
 	return output 
 def cmd_4_arg(arg1,arg2,arg3,arg4):
-	print "111"
 	p=subprocess.Popen([arg1,arg2,arg3,arg4])
 	output, err = p.communicate(b"input data that is passed to subprocess stdin")
-	print "222"	
 	return output
 def should_i_deploy(sum_money_spent_in_the_system,price_of_deploy_new_pod,price_per_seconds_of_pod,time_of_deploy_new_pod,time_slot_money_threshold):
 	#implement here a math calculatoin with money and return 1 if 
 	#is worth to deploy new pod 0 else
+	global pod	
 	calc=price_of_deploy_new_pod*time_of_deploy_new_pod+price_per_seconds_of_pod*pod
 	if calc<time_slot_money_threshold:
    	     return 1
@@ -63,25 +63,27 @@ def main():
    		price_of_deploy_new_pod=int(sys.argv[3]) 
    		time_slot_money_threshold=int(sys.argv[4])
    		time_of_deploy_new_pod=int(sys.argv[5]) 
-  		commnad('sh','test.sh',0)
+  		#commnad('sh','test.sh',0)  #---just for debug 
   		commnad('rm','file2.txt',0) #rm -rf file2.txt
+	global pod
 	pods_output=cmd_arg('kubectl','get','pods')	
 	print pods_output
-	pod=get_pod_from_output(pods_output)	
+	pod=get_pod_from_output(pods_output)	#implement this function
   	#ADD manipulate on output of kubectl get pod to get the pod number
 	p=cmd_4_arg('awk','END','{print NR}','file2.txt')	
-	#pod=int(commnad('awk','END {print NR} '+path,1)) #pod=$( awk 'END {print NR}' file2.txt)   
-  	pod=2 #debugging 
+	#pod=int(commnad('awk','END {print NR} '+path,1)) #pod=$( awk 'END {print NR}' file2.txt)     	
+	pod=1 #debugging 
   	if pod >1:  #so that we will start simulation from 1 pod
    		pod=1
    		pods_scale(pod)
   	var = 1
+	sum_money_spent_in_the_system=0
   	while var == 1 :  # This constructs an infinite loop
          	desicion=1       
 		desicion=rf.predict(qoe,pod) 
                 sum_money_spent_in_the_system=sum_money_spent_in_the_system+price_per_seconds_of_pod*pod
-                if desicion==1:
-                        if should_i_deploy(sum_money_spent_in_the_system,price_of_deploy_new_pod,price_per_seconds_of_pod)==1:  #need to  scale up
+                if desicion==1:  
+                        if should_i_deploy(sum_money_spent_in_the_system,price_of_deploy_new_pod,price_per_seconds_of_pod,time_of_deploy_new_pod,time_slot_money_threshold)==1:  #need to  scale up
                          	pod=pod+1
                                 pods_scale(pod)
                 if desicion ==-1: #scale down 
