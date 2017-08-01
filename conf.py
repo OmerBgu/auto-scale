@@ -166,6 +166,7 @@ man_pages = [
      [author], 1)
 ]
 
+pdf_documents = [('index', u'rst2pdf', u'Sample rst2pdf doc', u'Your Name'),]
 
 # -- Options for Texinfo output -------------------------------------------
 

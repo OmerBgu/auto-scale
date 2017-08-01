@@ -88,9 +88,9 @@
 <span class="kn">import</span> <span class="nn">rf</span>
 <span class="n">pod</span> <span class="o">=</span><span class="mi">1</span>
 <span class="c1">#TO DO:</span>
-<span class="c1">#change awk from file2.txt to manipulate output of kubectl get pod to know the pod number (see the output of it again)</span>
 <span class="c1">#implement calc of money on is it woth to deploy new pod  on function should_i_deploy() **strated ad naive implementation talk to omer gurevitz on it</span>
 <span class="c1">#check commands in VM</span>
+<span class="c1">#implement sample that replace sample.sh</span>
 <span class="c1">#talk to reuven on implemnt base on wireshark and not client</span>
 <div class="viewcode-block" id="commnad"><a class="viewcode-back" href="../doc/main.html#main.commnad">[docs]</a><span class="k">def</span> <span class="nf">commnad</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="n">arg</span><span class="p">,</span><span class="n">out</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;short description of the function command</span>
@@ -112,15 +112,15 @@
 		<span class="k">return</span> <span class="n">output</span></div>
 <div class="viewcode-block" id="pods_scale"><a class="viewcode-back" href="../doc/main.html#main.pods_scale">[docs]</a><span class="k">def</span> <span class="nf">pods_scale</span><span class="p">(</span><span class="n">pod</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;short description of the function</span>
-<span class="sd">    scale up to the pod number  </span>
+<span class="sd">    scale up to the pod number and then sleep for 3 second so that system will updatede  </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 	<span class="c1">#concatenate_cmd=&#39;kubectl scale --replicas=&#39;+str(pod)+ &#39;rc test&#39;</span>
 	<span class="n">p</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;kubectl&#39;</span><span class="p">,</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span><span class="s1">&#39;--replicas=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">pod</span><span class="p">),</span><span class="s1">&#39;rc&#39;</span><span class="p">,</span><span class="s1">&#39;test&#39;</span><span class="p">])</span>
 	<span class="n">output</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;input data that is passed to subprocess stdin&quot;</span><span class="p">)</span>
 	<span class="nb">print</span> <span class="n">p</span><span class="o">.</span><span class="n">returncode</span>
 	<span class="nb">print</span> <span class="n">output</span>
-   	<span class="nb">print</span> <span class="n">err</span></div>
-	<span class="c1">#commnad(concatenate_cmd,&#39;&#39;,0)  #kubectl scale --replicas=$pod rc test  &gt; trash.txt</span>
+   	<span class="nb">print</span> <span class="n">err</span>
+	<span class="n">sleep</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
 <div class="viewcode-block" id="cmd_arg"><a class="viewcode-back" href="../doc/main.html#main.cmd_arg">[docs]</a><span class="k">def</span> <span class="nf">cmd_arg</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span><span class="n">arg2</span><span class="p">,</span><span class="n">arg3</span><span class="p">):</span>
 	<span class="n">p</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">arg1</span><span class="p">,</span><span class="n">arg2</span><span class="p">,</span><span class="n">arg3</span><span class="p">])</span>
 	<span class="n">output</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;input data that is passed to subprocess stdin&quot;</span><span class="p">)</span>
@@ -140,14 +140,23 @@
 	<span class="k">if</span> <span class="n">calc</span><span class="o">&lt;</span><span class="n">time_slot_money_threshold</span><span class="p">:</span>
    	     <span class="k">return</span> <span class="mi">1</span>
 	<span class="k">else</span><span class="p">:</span>
-        	<span class="nb">print</span> <span class="s2">&quot;the deploy of a new pod is too expensive at the moment, if you want yo may change the money per time slot threshold&quot;</span>
+        	<span class="nb">print</span> <span class="s2">&quot;the deploy of a new pod is too expensive at the moment&quot;</span>
 		<span class="k">return</span> <span class="mi">0</span></div>
 <div class="viewcode-block" id="get_pod_from_output"><a class="viewcode-back" href="../doc/main.html#main.get_pod_from_output">[docs]</a><span class="k">def</span> <span class="nf">get_pod_from_output</span><span class="p">(</span><span class="n">pods_output</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;short description of the function</span>
 <span class="sd">  	get the pods number from kubectl top pods output </span>
 <span class="sd">    &quot;&quot;&quot;</span>	
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/home/omer/Downloads/get_pod.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    		 <span class="n">pods</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span>
+	<span class="n">pods</span><span class="o">=</span><span class="n">pods</span><span class="o">-</span><span class="mi">1</span>	
+	<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;pods number is </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">pods</span><span class="p">)</span> <span class="p">)</span>	
 	<span class="c1">#get the pod numer as int from this string and return it</span>
-	<span class="k">return</span> <span class="mi">1</span></div>
+	<span class="k">return</span> <span class="n">pods</span></div>
+<div class="viewcode-block" id="sample"><a class="viewcode-back" href="../doc/main.html#main.sample">[docs]</a><span class="k">def</span> <span class="nf">sample</span><span class="p">():</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	this function take 5 seconds of sample via kubectl top pods</span>
+<span class="sd">	replace the sample.sh script</span>
+<span class="sd">	&#39;&#39;&#39;</span></div>
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../doc/main.html#main.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 	<span class="sd">&quot;&quot;&quot;short description of the function</span>
 <span class="sd">	main loop </span>
@@ -171,11 +180,10 @@
   		<span class="n">commnad</span><span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span><span class="s1">&#39;file2.txt&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#rm -rf file2.txt</span>
 	<span class="k">global</span> <span class="n">pod</span>
 	<span class="n">pods_output</span><span class="o">=</span><span class="n">cmd_arg</span><span class="p">(</span><span class="s1">&#39;kubectl&#39;</span><span class="p">,</span><span class="s1">&#39;get&#39;</span><span class="p">,</span><span class="s1">&#39;pods&#39;</span><span class="p">)</span>	
-	<span class="nb">print</span> <span class="n">pods_output</span>
+	<span class="c1">#print pods_output</span>
 	<span class="n">pod</span><span class="o">=</span><span class="n">get_pod_from_output</span><span class="p">(</span><span class="n">pods_output</span><span class="p">)</span>	<span class="c1">#implement this function</span>
   	<span class="c1">#ADD manipulate on output of kubectl get pod to get the pod number</span>
-	<span class="n">p</span><span class="o">=</span><span class="n">cmd_4_arg</span><span class="p">(</span><span class="s1">&#39;awk&#39;</span><span class="p">,</span><span class="s1">&#39;END&#39;</span><span class="p">,</span><span class="s1">&#39;{print NR}&#39;</span><span class="p">,</span><span class="s1">&#39;file2.txt&#39;</span><span class="p">)</span>	
-	<span class="c1">#pod=int(commnad(&#39;awk&#39;,&#39;END {print NR} &#39;+path,1)) #pod=$( awk &#39;END {print NR}&#39; file2.txt)     	</span>
+	<span class="c1">#p=cmd_4_arg(&#39;awk&#39;,&#39;END&#39;,&#39;{print NR}&#39;,&#39;file2.txt&#39;)	</span>
 	<span class="n">pod</span><span class="o">=</span><span class="mi">1</span> <span class="c1">#debugging </span>
   	<span class="k">if</span> <span class="n">pod</span> <span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>  <span class="c1">#so that we will start simulation from 1 pod</span>
    		<span class="n">pod</span><span class="o">=</span><span class="mi">1</span>
