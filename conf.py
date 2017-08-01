@@ -125,6 +125,9 @@ htmlhelp_basename = 'Auto-Scaleforkubernetescontainersdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 latex_engine = 'xelatex'
+PREAMBLE = r"""
+\usepackage{amsmath}
+""" 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
@@ -133,7 +136,9 @@ latex_elements = {
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-    'preamble':r"""\usepackage{amsmath}"""
+    'preamble' : r"""
+    \usepackage{amsmath}
+    """ 
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
@@ -151,7 +156,7 @@ latex_documents = [
      u'Omer Anisfeld and reuven milshtein', 'manual'),
 ]
 
-
+_subdocs = [ ]
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples

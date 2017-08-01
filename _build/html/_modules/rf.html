@@ -51,7 +51,7 @@
 <span class="sd">random forest prediction  </span>
 <span class="sd">===================</span>
 
-<span class="sd">what we predict?  </span>
+<span class="sd">what this model predict?  </span>
 <span class="sd">----------</span>
 <span class="sd">the examined feature are the pod&#39;s cpu, memory and the predicted target us the current network delay at the client that</span>
 <span class="sd">normalized to the formula of TRUNC(IF(H138&lt;1.2,1,IF(H138&lt;1.5,2,3)))</span>
@@ -71,6 +71,15 @@
  <span class="c1"># if wont wore so worst case is to parse so that each pod will be examined and if one of them is needed to scale scale all system  </span>
  <span class="c1"># maybe all of the split of the data was unnecessary ...</span>
 <div class="viewcode-block" id="predict"><a class="viewcode-back" href="../doc/rf.html#rf.predict">[docs]</a><span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">qoe</span><span class="p">,</span><span class="n">podsnumber</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	this function get as parameter the pod&#39;s number</span>
+<span class="sd">	and the desired quality of experience</span>
+<span class="sd">	it has hard coded path to train csv file with cpu pod1, memory pod1,cpu pod2.... and the score of delay </span>
+<span class="sd">	it has hard coded the path for the last 5 seconds of CPU &amp;&amp; memory</span>
+<span class="sd">	it return 1 if the predicted qoe is greater then the desired qoe means scale up is needed</span>
+<span class="sd">	return -1 if the predicted qoe is smaller then the desired qoe means scale up is needed</span>
+<span class="sd">	return 0 if the predicted qoe is equal to the desired qoe </span>
+<span class="sd">	&quot;&quot;&quot;</span>
 	<span class="c1">#url = &#39;/home/omer/PycharmProjects/untitled/data/try.csv&#39;</span>
         <span class="c1">#load data  </span>
  	<span class="n">train</span><span class="o">=</span><span class="s1">&#39;/home/ubuntu/train&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">podsnumber</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.csv&quot;</span> <span class="c1">#true path on the vm</span>
@@ -86,7 +95,6 @@
   	<span class="n">row</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">podsnumber</span> <span class="o">*</span> <span class="mi">2</span>
   	<span class="c1"># Split-out validation train_set</span>
   	<span class="n">train_set_as_array</span> <span class="o">=</span> <span class="n">train_set</span><span class="o">.</span><span class="n">values</span>
-	<span class="nb">print</span> <span class="nb">len</span> <span class="p">(</span><span class="n">train_set</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
   	<span class="c1"># train_set_as_array=transformed_values</span>
   	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_set_as_array</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
         	<span class="n">train_set_as_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>

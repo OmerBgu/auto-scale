@@ -2,7 +2,7 @@
 random forest prediction  
 ===================
 
-what we predict?  
+what this model predict?  
 ----------
 the examined feature are the pod's cpu, memory and the predicted target us the current network delay at the client that
 normalized to the formula of TRUNC(IF(H138<1.2,1,IF(H138<1.5,2,3)))
@@ -22,6 +22,15 @@ from sklearn import model_selection
  # if wont wore so worst case is to parse so that each pod will be examined and if one of them is needed to scale scale all system  
  # maybe all of the split of the data was unnecessary ...
 def predict(qoe,podsnumber):
+	"""
+	this function get as parameter the pod's number
+	and the desired quality of experience
+	it has hard coded path to train csv file with cpu pod1, memory pod1,cpu pod2.... and the score of delay 
+	it has hard coded the path for the last 5 seconds of CPU && memory
+	it return 1 if the predicted qoe is greater then the desired qoe means scale up is needed
+	return -1 if the predicted qoe is smaller then the desired qoe means scale up is needed
+	return 0 if the predicted qoe is equal to the desired qoe 
+	"""
 	#url = '/home/omer/PycharmProjects/untitled/data/try.csv'
         #load data  
  	train='/home/ubuntu/train'+str(podsnumber)+".csv" #true path on the vm
@@ -37,7 +46,6 @@ def predict(qoe,podsnumber):
   	row = 2 + podsnumber * 2
   	# Split-out validation train_set
   	train_set_as_array = train_set.values
-	print len (train_set.values)
   	# train_set_as_array=transformed_values
   	for i in range(1, len(train_set_as_array) - 1):
         	train_set_as_array[i].astype(float)

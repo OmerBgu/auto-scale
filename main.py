@@ -39,9 +39,9 @@ import subprocess
 import rf
 pod =1
 #TO DO:
-#change awk from file2.txt to manipulate output of kubectl get pod to know the pod number (see the output of it again)
 #implement calc of money on is it woth to deploy new pod  on function should_i_deploy() **strated ad naive implementation talk to omer gurevitz on it
 #check commands in VM
+#implement sample that replace sample.sh
 #talk to reuven on implemnt base on wireshark and not client
 def commnad(cmd,arg,out):
 	"""short description of the function command
@@ -63,7 +63,7 @@ def commnad(cmd,arg,out):
 		return output
 def pods_scale(pod):
 	"""short description of the function
-    scale up to the pod number  
+    scale up to the pod number and then sleep for 3 second so that system will updatede  
     """
 	#concatenate_cmd='kubectl scale --replicas='+str(pod)+ 'rc test'
 	p=subprocess.Popen(['kubectl','scale','--replicas='+str(pod),'rc','test'])
@@ -71,7 +71,7 @@ def pods_scale(pod):
 	print p.returncode
 	print output
    	print err
-	#commnad(concatenate_cmd,'',0)  #kubectl scale --replicas=$pod rc test  > trash.txt
+	sleep (3)
 def cmd_arg(arg1,arg2,arg3):
 	p=subprocess.Popen([arg1,arg2,arg3])
 	output, err = p.communicate(b"input data that is passed to subprocess stdin")
@@ -91,14 +91,23 @@ def should_i_deploy(sum_money_spent_in_the_system,price_of_deploy_new_pod,price_
 	if calc<time_slot_money_threshold:
    	     return 1
 	else:
-        	print "the deploy of a new pod is too expensive at the moment, if you want yo may change the money per time slot threshold"
+        	print "the deploy of a new pod is too expensive at the moment"
 		return 0
 def get_pod_from_output(pods_output):
 	"""short description of the function
   	get the pods number from kubectl top pods output 
     """	
+	with open('/home/omer/Downloads/get_pod.txt') as f:
+    		 pods=sum(1 for _ in f)
+	pods=pods-1	
+	print ('pods number is %d'%(pods) )	
 	#get the pod numer as int from this string and return it
-	return 1
+	return pods
+def sample():
+	'''
+	this function take 5 seconds of sample via kubectl top pods
+	replace the sample.sh script
+	'''
 def main():
 	"""short description of the function
 	main loop 
@@ -122,11 +131,10 @@ def main():
   		commnad('rm','file2.txt',0) #rm -rf file2.txt
 	global pod
 	pods_output=cmd_arg('kubectl','get','pods')	
-	print pods_output
+	#print pods_output
 	pod=get_pod_from_output(pods_output)	#implement this function
   	#ADD manipulate on output of kubectl get pod to get the pod number
-	p=cmd_4_arg('awk','END','{print NR}','file2.txt')	
-	#pod=int(commnad('awk','END {print NR} '+path,1)) #pod=$( awk 'END {print NR}' file2.txt)     	
+	#p=cmd_4_arg('awk','END','{print NR}','file2.txt')	
 	pod=1 #debugging 
   	if pod >1:  #so that we will start simulation from 1 pod
    		pod=1

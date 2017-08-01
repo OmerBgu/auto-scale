@@ -50,14 +50,21 @@
 <span id="rf-module"></span><h1>rf module<a class="headerlink" href="#module-rf" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="random-forest-prediction">
 <h2>random forest prediction<a class="headerlink" href="#random-forest-prediction" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="what-we-predict">
-<h3>what we predict?<a class="headerlink" href="#what-we-predict" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="what-this-model-predict">
+<h3>what this model predict?<a class="headerlink" href="#what-this-model-predict" title="Permalink to this headline">¶</a></h3>
 <p>the examined feature are the pod’s cpu, memory and the predicted target us the current network delay at the client that
 normalized to the formula of TRUNC(IF(H138&lt;1.2,1,IF(H138&lt;1.5,2,3)))</p>
 <dl class="function">
 <dt id="rf.predict">
 <code class="descclassname">rf.</code><code class="descname">predict</code><span class="sig-paren">(</span><em>qoe</em>, <em>podsnumber</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rf.html#predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rf.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>this function get as parameter the pod’s number
+and the desired quality of experience
+it has hard coded path to train csv file with cpu pod1, memory pod1,cpu pod2…. and the score of delay 
+it has hard coded the path for the last 5 seconds of CPU &amp;&amp; memory
+it return 1 if the predicted qoe is greater then the desired qoe means scale up is needed
+return -1 if the predicted qoe is smaller then the desired qoe means scale up is needed
+return 0 if the predicted qoe is equal to the desired qoe</p>
+</dd></dl>
 
 </div>
 </div>

@@ -4,7 +4,7 @@ client simulation
 
 this is the inital hand-shake of a new client 
 ----------
-this program is a simple client simulation that enterd based on posin entrance to the server
+this program is a simple client simulation that make stream of on poison entrance to the server
 and capture the network delay on the client side 
 """
 
