@@ -5,7 +5,7 @@ this is the main loop endles loop that each 5 seconds does:
 
 take 5 samples of the server cluster cpu and memory  
 ----------
-intrafacing with kubernetes cli
+using the with kubernetes cli
 
 predict the network delay  
 ----------
@@ -80,18 +80,37 @@ def cmd_4_arg(arg1,arg2,arg3,arg4):
 	p=subprocess.Popen([arg1,arg2,arg3,arg4])
 	output, err = p.communicate(b"input data that is passed to subprocess stdin")
 	return output
-def should_i_deploy(sum_money_spent_in_the_system,price_of_deploy_new_pod,price_per_seconds_of_pod,time_of_deploy_new_pod,time_slot_money_threshold):
+	"""this function is checking threshold policy if it is larger then 70%
+	 in cpu or in memory return -1 means not worty to cale up else worth to scale up 
+      
+    """
+def threshold_policy(pod):
+	with open('/home/omer/Downloads/pods_status.txt') as f:
+			wordlist = [r.split()[2] for r in f]
+			cpu1= int (wordlist[1][0])*10+int (wordlist[1][1])
+			cpu2= int (wordlist[2][0])*10+int (wordlist[2][1])
+			if cpu1>0.7  or cpu2>0.7 :
+				return -1
+			wordlist = [r.split()[4] for r in f]
+			print wordlist
+			mem=int (wordlist[1][0])*10+int (wordlist[1][1])
+			if mem >0.7 :
+				return -1
+			return 1
+			
+
+def should_i_deploy(Money_Spent,price_of_deploy_new_pod,price_per_seconds_of_pod,Money_Profit,time_slot_money_threshold):
 	"""short description of the function
-    make decision to scale up if price_of_deploy_new_pod*time_of_deploy_new_pod+price_per_seconds_of_pod*pod <time_slot_money_threshold 
+    make decision to scale up if price_of_deploy_new_pod+price_per_seconds_of_pod*pod <time_slot_money_threshold 
     """	
 	#implement here a math calculatoin with money and return 1 if 
 	#is worth to deploy new pod 0 else
 	global pod	
-	calc=price_of_deploy_new_pod*time_of_deploy_new_pod+price_per_seconds_of_pod*pod
+	calc=price_of_deploy_new_pod+price_per_seconds_of_pod*pod
 	if calc<time_slot_money_threshold:
    	     return 1
 	else:
-        	print "the deploy of a new pod is too expensive at the moment"
+        	print "the deploy of a new pod is too expensive at the moment, larger then user threshold"
 		return 0
 def get_pod_from_output(pods_output):
 	"""short description of the function
@@ -113,6 +132,7 @@ def main():
 	main loop 
     """	
 	#input check
+	price_qoe = [0] * 4 #array of 3 prices in index 0 qoe price 1 ,index 1 aoe price 2...
 	if len(sys.argv)<2:
 		print "No quality of experince has  entered"
 		sys.exit(0)
@@ -126,12 +146,17 @@ def main():
    		price_per_seconds_of_pod=int(sys.argv[2])#cost of pod per time slot currently per 1 sec
    		price_of_deploy_new_pod=int(sys.argv[3]) 
    		time_slot_money_threshold=int(sys.argv[4])
-   		time_of_deploy_new_pod=int(sys.argv[5]) 
+   		price_qoe[0]=int(sys.argv[5]) 
+		price_qoe[1]=int(sys.argv[6])
+		price_qoe[2]=int(sys.argv[7])
+		price_qoe[3]=int(price_qoe[2]/2) # the last qoe price we can charge for giving qoe level worest then 3 is half of 3
+		penalty=int(sys.argv[8]) 
   		#commnad('sh','test.sh',0)  #---just for debug 
-  		commnad('rm','file2.txt',0) #rm -rf file2.txt
+  		commnad('rm','file2.txt',0) #rm -rf file2.txt 
+	threshold_policy(2)
 	global pod
-	pods_output=cmd_arg('kubectl','get','pods')	
-	#print pods_output
+	pods_output=cmd_arg('kubectl','get','pod')
+	#maybe change to -> kubectl top pod --capacity	
 	pod=get_pod_from_output(pods_output)	#implement this function
   	#ADD manipulate on output of kubectl get pod to get the pod number
 	#p=cmd_4_arg('awk','END','{print NR}','file2.txt')	
@@ -140,17 +165,22 @@ def main():
    		pod=1
    		pods_scale(pod)
   	var = 1
-	sum_money_spent_in_the_system=0
+	Money_Spent=0
+	Money_Profit=0
   	while var == 1 :  # This constructs an infinite loop
          	desicion=1       
 		desicion=rf.predict(qoe,pod) 
-                sum_money_spent_in_the_system=sum_money_spent_in_the_system+price_per_seconds_of_pod*pod
+                Money_Spent=Money_Spent+price_per_seconds_of_pod*pod
                 if desicion==1:  
-                        if should_i_deploy(sum_money_spent_in_the_system,price_of_deploy_new_pod,price_per_seconds_of_pod,time_of_deploy_new_pod,time_slot_money_threshold)==1:  #need to  scale up
+			Money_Profit=Money_Profit-penalty+price_qoe[qoe]*pod #price_qoe[qoe] is in qoe 1 worst then you shold be 
+                        if should_i_deploy(Money_Spent,price_of_deploy_new_pod,price_per_seconds_of_pod,Money_Profit,time_slot_money_threshold)==1:  #need to  scale up
                          	pod=pod+1
                                 pods_scale(pod)
                 if desicion ==-1: #scale down 
-                        pod=pod-1
+			Money_Profit=Money_Profit+price_qoe[qoe-1]*pod #add standart money to profit                        
+			pod=pod-1
                         pods_scale(pod)
+		if desicion ==0: #nothing just add money to profit
+			Money_Profit+Money_Profit+price_qoe[qoe-1]*pod 
 if __name__ == "__main__":
 	main()
