@@ -1,0 +1,13 @@
+  Namespace         Name                                CPU Requests    CPU Limits  Memory Requests Memory Limits
+  ---------         ----                                ------------    ----------  --------------- -------------
+  default           kube-lego                           20m (2%)    0 (0%)      0 (0%)      0 (0%)
+  default           mongo-0                             100m (10%)  0 (0%)      0 (0%)      0 (0%)
+  default           web                                 100m (10%)  0 (0%)      0 (0%)      0 (0%)
+  kube-system       event-exporter-                     0 (0%)      0 (0%)      0 (0%)      0 (0%)
+  kube-system-test       fluentd-gcp-v2.0-z6xh9         100m (10%)  138m (13%)      200Mi (11%) 300Mi (17%)
+  kube-system       heapster-v1.4.0-3405140848-k6cm9    138m (13%)  138m (13%)  301456Ki (17%)  301456Ki (17%)
+  kube-system       kube-dns-3809445927-hn5xk           260m (26%)  0 (0%)      110Mi (6%)  170Mi (9%)
+  kube-system       kube-dns-autoscaler-38801           20m (2%)    0 (0%)      10Mi (0%)   0 (0%)
+  kube-system       kube-proxy-gke-staging-default-     100m (10%)  0 (0%)      0 (0%)      0 (0%)
+  kube-system       kubernetes-dashboard-1962351        100m (10%)  100m (10%)  100Mi (5%)  300Mi (17%)
+  kube-system       l7-default-backend-295440977        10m (1%)    10m (1%)    20Mi (1%)   20Mi (1%)
